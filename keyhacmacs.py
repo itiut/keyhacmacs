@@ -7,10 +7,9 @@ def configure(keymap, target_exe_names=[]):
 
     keymap_keyhacmacs = keymap.defineWindowKeymap(check_func=is_target)
 
+    # enable/disable keyhacmacs
     keymap_keyhacmacs.is_enabled = False
-    keymap_keyhacmacs.is_mark = False
 
-    # ON / OFF
     def toggle_keyhacmacs():
         keymap_keyhacmacs.is_enabled = not keymap_keyhacmacs.is_enabled
         popup_keyhacmacs_status()
@@ -29,7 +28,16 @@ def configure(keymap, target_exe_names=[]):
 
     keymap_keyhacmacs["D-(242)"] = toggle_keyhacmacs
 
-    # Moving Point
+    # emacs-like local state
+    keymap_keyhacmacs.is_mark = False
+
+    def set_mark():
+        keymap_keyhacmacs.is_mark = True
+
+    def unset_mark():
+        keymap_keyhacmacs.is_mark = False
+
+    # moving point
     def forward_char():
         keymap.command_InputKey("Right")()
 
@@ -69,7 +77,7 @@ def configure(keymap, target_exe_names=[]):
     def goto_line():
         keymap.command_InputKey("C-g")()
 
-    # Erasing, Killing, Yanking
+    # erasing, killing, yanking
     def delete_backward_char():
         keymap.command_InputKey("Back")()
         keymap_keyhacmacs.is_mark = False
@@ -105,7 +113,7 @@ def configure(keymap, target_exe_names=[]):
         keymap.command_InputKey("C-End", "C-S-Home")()
         keymap_keyhacmacs.is_mark = True
 
-    # Undo, Redo
+    # undo, redo
     def undo():
         keymap.command_InputKey("C-z")()
         keymap_keyhacmacs.is_mark = False
@@ -114,7 +122,7 @@ def configure(keymap, target_exe_names=[]):
         keymap.command_InputKey("C-y")()
         keymap_keyhacmacs.is_mark = False
 
-    # Search
+    # search
     def isearch_forward():
         # TODO: 検索中は <f3> or C-g
         keymap.command_InputKey("C-f")()
@@ -125,7 +133,7 @@ def configure(keymap, target_exe_names=[]):
         keymap.command_InputKey("C-f")()
         keymap_keyhacmacs.is_mark = False
 
-    # Indent, Newline
+    # indent, newline
     def indent_for_tab_command():
         keymap.command_InputKey("Tab")()
         keymap_keyhacmacs.is_mark = False
@@ -151,7 +159,7 @@ def configure(keymap, target_exe_names=[]):
         keymap.command_RecordStop()
         keymap_keyhacmacs.is_mark = False
 
-    # File
+    # file
     def find_file():
         keymap.command_InputKey("C-o")()
         keymap_keyhacmacs.is_mark = False
@@ -162,7 +170,7 @@ def configure(keymap, target_exe_names=[]):
     def write_file():
         keymap.command_InputKey("C-S-s")()
 
-    # Window
+    # window
     def kill_buffer():
         keymap.command_InputKey("C-w")()
         keymap_keyhacmacs.is_mark = False
@@ -171,7 +179,7 @@ def configure(keymap, target_exe_names=[]):
         keymap.command_InputKey("A-F4")()
         keymap_keyhacmacs.is_mark = False
 
-    # define key Bindings
+    # define key bindings
     define_keys = {
         "C-a": [ move_beginning_of_line, ],
         "C-b": [ backward_char, ],

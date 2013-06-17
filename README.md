@@ -20,7 +20,7 @@ keyhac extension for emacs-like key bindings
         # add this
         keyhacmacs.configure(
             keymap=keymap,
-            exe_names=[
+            target_exe_names=[
                 "devenv.exe",
                 "sublime_text.exe",
             ]

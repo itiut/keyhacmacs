@@ -40,6 +40,9 @@ def configure(keymap):
     def scroll_down():
         keymap.command_InputKey("PageDown")()
 
+    def goto_line():
+        keymap.command_InputKey("C-g")()
+
     # Erasing, Killing, Yanking
     def delete_backward_char():
         keymap.command_InputKey("Back")()
@@ -169,6 +172,7 @@ def configure(keymap):
         "C-Underscore": undo,
         "C-S-Slash": redo,
         "C-S-Underscore": redo,
+        "A-g": goto_line,
         "A-v": scroll_up,
         "A-w": kill_ring_save,
         "A-S-Comma": beginning_of_buffer,

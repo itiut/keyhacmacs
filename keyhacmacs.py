@@ -29,13 +29,19 @@ def configure(keymap, target_exe_names=[]):
     keymap_keyhacmacs["D-(242)"] = toggle_keyhacmacs
 
     # emacs-like local state
-    keymap_keyhacmacs.is_mark = False
+    keymap_keyhacmacs.is_marked = False
+
+    def toggle_mark():
+        if keymap_keyhacmacs.is_marked:
+            unset_mark()
+        else:
+            set_mark()
 
     def set_mark():
-        keymap_keyhacmacs.is_mark = True
+        keymap_keyhacmacs.is_marked = True
 
     def unset_mark():
-        keymap_keyhacmacs.is_mark = False
+        keymap_keyhacmacs.is_marked = False
 
     # moving point
     def forward_char():
@@ -86,11 +92,11 @@ def configure(keymap, target_exe_names=[]):
 
     def kill_line():
         # TODO: マーク実装する
-        keymap_keyhacmacs.is_mark = True
+        keymap_keyhacmacs.is_marked = True
         #mark(move_end_of_line)()
         move_end_of_line()
         keymap.command_InputKey("C-x")()
-        keymap_keyhacmacs.is_mark = False
+        keymap_keyhacmacs.is_marked = False
 
     def kill_region():
         keymap.command_InputKey("C-x")()
@@ -102,11 +108,12 @@ def configure(keymap, target_exe_names=[]):
         keymap.command_InputKey("C-v")()
 
     def set_mark_command():
-        keymap_keyhacmacs.is_mark = not keymap_keyhacmacs.is_mark
+        # emacsの挙動は新たにマークするなので少し違う
+        toggle_mark()
 
     def mark_whole_buffer():
         keymap.command_InputKey("C-End", "C-S-Home")()
-        keymap_keyhacmacs.is_mark = True
+        keymap_keyhacmacs.is_marked = True
 
     # undo, redo
     def undo():
@@ -147,7 +154,7 @@ def configure(keymap, target_exe_names=[]):
     # file
     def find_file():
         keymap.command_InputKey("C-o")()
-        keymap_keyhacmacs.is_mark = False
+        keymap_keyhacmacs.is_marked = False
 
     def save_buffer():
         keymap.command_InputKey("C-s")()
@@ -158,11 +165,11 @@ def configure(keymap, target_exe_names=[]):
     # window
     def kill_buffer():
         keymap.command_InputKey("C-w")()
-        keymap_keyhacmacs.is_mark = False
+        keymap_keyhacmacs.is_marked = False
 
     def kill_emacs():
         keymap.command_InputKey("A-F4")()
-        keymap_keyhacmacs.is_mark = False
+        keymap_keyhacmacs.is_marked = False
 
     # define key bindings
     define_keys = {

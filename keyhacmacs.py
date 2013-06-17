@@ -217,17 +217,16 @@ def configure(keymap, exe_names=[]):
         "C-w": write_file,
     }
 
-    def apply_keyhacmacs(key, func):
+    def call_if_enabled(key, func):
         def _func():
             if keymap_keyhacmacs.is_enabled:
                 func()
             else:
                 keymap.command_InputKey(key)()
-
         return _func
 
     for k, f in define_keys.items():
-        keymap_keyhacmacs[k] = apply_keyhacmacs(key=k, func=f)
+        keymap_keyhacmacs[k] = call_if_enabled(key=k, func=f)
 
     keymap_keyhacmacs["C-x"] = keymap.defineMultiStrokeKeymap("C-x")
     for k, f in define_keys_C_x.items():

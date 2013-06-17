@@ -1,9 +1,9 @@
 ﻿# coding: utf-8
 
-def configure(keymap):
+def configure(keymap, exe_names=[]):
 
     def is_target(window):
-        return window.getProcessName() in ("sublime_text.exe", )
+        return window.getProcessName() in exe_names
 
     keymap_keyhacmacs = keymap.defineWindowKeymap(check_func=is_target)
 

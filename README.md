@@ -11,11 +11,11 @@ keyhac extension for emacs-like key bindings
 2. edit config.py
     ```python
     from keyhac import *
-    from keyhacmacs import *
+    from keyhacmacs import *    # add this
 
     def configure(keymap):
         # your own code
         # ...
 
-        keyhacmacs.configure(keymap)
+        keyhacmacs.configure(keymap)    # add this
     ```

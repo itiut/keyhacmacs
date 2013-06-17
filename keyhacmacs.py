@@ -25,6 +25,12 @@ def configure(keymap):
     def move_beginning_of_line():
         keymap.command_InputKey("Home")()
 
+    def forward_word():
+        keymap.command_InputKey("C-Right")()
+
+    def backward_word():
+        keymap.command_InputKey("C-Left")()
+
     def move_end_of_line():
         keymap.command_InputKey("End")()
 
@@ -172,6 +178,8 @@ def configure(keymap):
         "C-Underscore": undo,
         "C-S-Slash": redo,
         "C-S-Underscore": redo,
+        "A-b": backward_word,
+        "A-f": forward_word,
         "A-g": goto_line,
         "A-v": scroll_up,
         "A-w": kill_ring_save,

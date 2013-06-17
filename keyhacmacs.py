@@ -173,38 +173,38 @@ def configure(keymap, exe_names=[]):
 
     # define key Bindings
     define_keys = {
-        "C-a": move_beginning_of_line,
-        "C-b": backward_char,
-        "C-d": delete_char,
-        "C-e": move_end_of_line,
-        "C-f": forward_char,
-        "C-g": keyboard_quit,
-        "C-h": delete_backward_char,
-        "C-i": indent_for_tab_command,
-        "C-j": newline,    # or newline_and_indent
-#        "C-k": kill_line,
-        "C-m": newline,
-        "C-n": next_line,
-        "C-o": open_line,
-        "C-p": previous_line,
-        "C-r": isearch_backward,
-        "C-s": isearch_forward,
-        "C-v": scroll_down,
-        "C-w": kill_region,
-        "C-y": yank,
-        "C-Atmark": set_mark_command,
-        "C-Slash": undo,
-        "C-Space": set_mark_command,
-        "C-Underscore": undo,
-        "C-S-Slash": redo,
-        "C-S-Underscore": redo,
-        "A-b": backward_word,
-        "A-f": forward_word,
-        "A-g": goto_line,
-        "A-v": scroll_up,
-        "A-w": kill_ring_save,
-        "A-S-Comma": beginning_of_buffer,
-        "A-S-Period": end_of_buffer,
+        "C-a": [ move_beginning_of_line, ],
+        "C-b": [ backward_char, ],
+        "C-d": [ delete_char, ],
+        "C-e": [ move_end_of_line, ],
+        "C-f": [ forward_char, ],
+        "C-g": [ keyboard_quit, ],
+        "C-h": [ delete_backward_char, ],
+        "C-i": [ indent_for_tab_command, ],
+        "C-j": [ newline, ],    # or newline_and_indent
+#        "C-k": [ kill_line, ],
+        "C-m": [ newline, ],
+        "C-n": [ next_line, ],
+        "C-o": [ open_line, ],
+        "C-p": [ previous_line, ],
+        "C-r": [ isearch_backward, ],
+        "C-s": [ isearch_forward, ],
+        "C-v": [ scroll_down, ],
+        "C-w": [ kill_region, ],
+        "C-y": [ yank, ],
+        "C-Atmark": [ set_mark_command, ],
+        "C-Slash": [ undo, ],
+        "C-Space": [ set_mark_command, ],
+        "C-Underscore": [ undo, ],
+        "C-S-Slash": [ redo, ],
+        "C-S-Underscore": [ redo, ],
+        "A-b": [ backward_word, ],
+        "A-f": [ forward_word, ],
+        "A-g": [ goto_line, ],
+        "A-v": [ scroll_up, ],
+        "A-w": [ kill_ring_save, ],
+        "A-S-Comma": [ beginning_of_buffer, ],
+        "A-S-Period": [ end_of_buffer, ],
     }
 
     define_keys_C_x = {
@@ -225,8 +225,14 @@ def configure(keymap, exe_names=[]):
                 keymap.command_InputKey(key)()
         return _func
 
-    for k, f in define_keys.items():
-        keymap_keyhacmacs[k] = call_if_enabled(key=k, func=f)
+    def join_funcs(funcs):
+        def _func():
+            for f in funcs:
+                f()
+        return _func
+
+    for k, fs in define_keys.items():
+        keymap_keyhacmacs[k] = call_if_enabled(key=k, func=join_funcs(funcs=fs))
 
     keymap_keyhacmacs["C-x"] = keymap.defineMultiStrokeKeymap("C-x")
     for k, f in define_keys_C_x.items():

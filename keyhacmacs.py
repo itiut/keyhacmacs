@@ -7,7 +7,27 @@ def configure(keymap, exe_names=[]):
 
     keymap_keyhacmacs = keymap.defineWindowKeymap(check_func=is_target)
 
+    keymap_keyhacmacs.is_enabled = False
     keymap_keyhacmacs.is_mark = False
+
+    # ON / OFF
+    def toggle_keyhacmacs():
+        keymap_keyhacmacs.is_enabled = not keymap_keyhacmacs.is_enabled
+        popup_keyhacmacs_status()
+
+    def enable_keyhacmacs():
+        keymap_keyhacmacs.is_enabled = True
+        popup_keyhacmacs_status()
+
+    def disable_keyhacmacs():
+        keymap_keyhacmacs.is_enabled = False
+        popup_keyhacmacs_status()
+
+    def popup_keyhacmacs_status():
+        state = "ON" if keymap_keyhacmacs.is_enabled else "OFF"
+        keymap.popBalloon("keyhacmacs", "keyhacmacs is " + state, 3000)
+
+    keymap_keyhacmacs["D-(242)"] = toggle_keyhacmacs
 
     # Moving Point
     def forward_char():
@@ -197,8 +217,17 @@ def configure(keymap, exe_names=[]):
         "C-w": write_file,
     }
 
+    def apply_keyhacmacs(key, func):
+        def _func():
+            if keymap_keyhacmacs.is_enabled:
+                func()
+            else:
+                keymap.command_InputKey(key)()
+
+        return _func
+
     for k, f in define_keys.items():
-        keymap_keyhacmacs[k] = f
+        keymap_keyhacmacs[k] = apply_keyhacmacs(key=k, func=f)
 
     keymap_keyhacmacs["C-x"] = keymap.defineMultiStrokeKeymap("C-x")
     for k, f in define_keys_C_x.items():

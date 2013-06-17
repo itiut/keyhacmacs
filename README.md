@@ -17,5 +17,12 @@ keyhac extension for emacs-like key bindings
         # your own code
         # ...
 
-        keyhacmacs.configure(keymap)    # add this
+        # add this
+        keyhacmacs.configure(
+            keymap=keymap,
+            exe_names=[
+                "devenv.exe",
+                "sublime_text.exe",
+            ]
+        )
     ```

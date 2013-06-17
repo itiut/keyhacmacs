@@ -197,9 +197,9 @@ def configure(keymap, exe_names=[]):
         "C-w": write_file,
     }
 
-    for k, v in define_keys.items():
-        keymap_keyhacmacs[k] = v
+    for k, f in define_keys.items():
+        keymap_keyhacmacs[k] = f
 
     keymap_keyhacmacs["C-x"] = keymap.defineMultiStrokeKeymap("C-x")
-    for k, v in define_keys_C_x.items():
-        keymap_keyhacmacs["C-x"][k] = v
+    for k, f in define_keys_C_x.items():
+        keymap_keyhacmacs["C-x"][k] = f

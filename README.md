@@ -2,7 +2,7 @@
 keyhac extension for emacs-like key bindings
 
 ## Usage
-1. install extension
+1. install this extension
     ```
     $ cd /path/to/keyhac-install-dir/extension
     $ git clone git://github.com/itiut/keyhacmacs.git

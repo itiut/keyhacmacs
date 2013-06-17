@@ -80,11 +80,9 @@ def configure(keymap, target_exe_names=[]):
     # erasing, killing, yanking
     def delete_backward_char():
         keymap.command_InputKey("Back")()
-        keymap_keyhacmacs.is_mark = False
 
     def delete_char():
         keymap.command_InputKey("Delete")()
-        keymap_keyhacmacs.is_mark = False
 
     def kill_line():
         # TODO: マーク実装する
@@ -96,15 +94,12 @@ def configure(keymap, target_exe_names=[]):
 
     def kill_region():
         keymap.command_InputKey("C-x")()
-        keymap_keyhacmacs.is_mark = False
 
     def kill_ring_save():
         keymap.command_InputKey("C-c", "Esc")()
-        keymap_keyhacmacs.is_mark = False
 
     def yank():
         keymap.command_InputKey("C-v")()
-        keymap_keyhacmacs.is_mark = False
 
     def set_mark_command():
         keymap_keyhacmacs.is_mark = not keymap_keyhacmacs.is_mark
@@ -116,48 +111,38 @@ def configure(keymap, target_exe_names=[]):
     # undo, redo
     def undo():
         keymap.command_InputKey("C-z")()
-        keymap_keyhacmacs.is_mark = False
 
     def redo():
         keymap.command_InputKey("C-y")()
-        keymap_keyhacmacs.is_mark = False
 
     # search
     def isearch_forward():
         # TODO: 検索中は <f3> or C-g
         keymap.command_InputKey("C-f")()
-        keymap_keyhacmacs.is_mark = False
 
     def isearch_backward():
         # TODO: 検索中は S-<f3> or C-S-g
         keymap.command_InputKey("C-f")()
-        keymap_keyhacmacs.is_mark = False
 
     # indent, newline
     def indent_for_tab_command():
         keymap.command_InputKey("Tab")()
-        keymap_keyhacmacs.is_mark = False
 
     def newline():
         keymap.command_InputKey("Enter")()
-        keymap_keyhacmacs.is_mark = False
 
     def newline_and_indent():
         keymap.command_InputKey("Enter", "Tab")
-        keymap_keyhacmacs.is_mark = False
 
     def open_line():
         keymap.command_InputKey("Enter", "Up", "End")()
-        keymap_keyhacmacs.is_mark = False
 
     def open_line_above():
         keymap.command_InputKey("Home", "Enter", "Up")()
-        keymap_keyhacmacs.is_mark = False
 
     def keyboard_quit():
         keymap.command_InputKey("Esc")()
-        keymap.command_RecordStop()
-        keymap_keyhacmacs.is_mark = False
+        #keymap.command_RecordStop()
 
     # file
     def find_file():
@@ -183,34 +168,35 @@ def configure(keymap, target_exe_names=[]):
     define_keys = {
         "C-a": [ move_beginning_of_line, ],
         "C-b": [ backward_char, ],
-        "C-d": [ delete_char, ],
+        "C-d": [ delete_char, unset_mark, ],
         "C-e": [ move_end_of_line, ],
         "C-f": [ forward_char, ],
-        "C-g": [ keyboard_quit, ],
-        "C-h": [ delete_backward_char, ],
-        "C-i": [ indent_for_tab_command, ],
-        "C-j": [ newline, ],    # or newline_and_indent
+        "C-g": [ keyboard_quit, unset_mark, ],
+        "C-h": [ delete_backward_char, unset_mark, ],
+        "C-i": [ indent_for_tab_command, unset_mark, ],
+        "C-j": [ newline, unset_mark, ],    # or newline_and_indent
 #        "C-k": [ kill_line, ],
-        "C-m": [ newline, ],
+        "C-m": [ newline, unset_mark, ],
         "C-n": [ next_line, ],
-        "C-o": [ open_line, ],
+        "C-o": [ open_line, unset_mark],
         "C-p": [ previous_line, ],
-        "C-r": [ isearch_backward, ],
-        "C-s": [ isearch_forward, ],
+        "C-r": [ isearch_backward, unset_mark, ],
+        "C-s": [ isearch_forward, unset_mark, ],
         "C-v": [ scroll_down, ],
-        "C-w": [ kill_region, ],
-        "C-y": [ yank, ],
+        "C-w": [ kill_region, unset_mark, ],
+        "C-y": [ yank, unset_mark, ],
         "C-Atmark": [ set_mark_command, ],
-        "C-Slash": [ undo, ],
+        "C-Slash": [ undo, unset_mark, ],
         "C-Space": [ set_mark_command, ],
-        "C-Underscore": [ undo, ],
-        "C-S-Slash": [ redo, ],
-        "C-S-Underscore": [ redo, ],
+        "C-Underscore": [ undo, unset_mark, ],
+        "C-S-o": [ open_line_above, unset_mark, ],
+        "C-S-Slash": [ redo, unset_mark, ],
+        "C-S-Underscore": [ redo, unset_mark, ],
         "A-b": [ backward_word, ],
         "A-f": [ forward_word, ],
         "A-g": [ goto_line, ],
         "A-v": [ scroll_up, ],
-        "A-w": [ kill_ring_save, ],
+        "A-w": [ kill_ring_save, unset_mark, ],
         "A-S-Comma": [ beginning_of_buffer, ],
         "A-S-Period": [ end_of_buffer, ],
     }
@@ -218,7 +204,7 @@ def configure(keymap, target_exe_names=[]):
     define_keys_C_x = {
         "h": mark_whole_buffer,
         "k": kill_buffer,
-        "u": undo,
+        "u": undo, # and unset_mark
         "C-c": kill_emacs,
         "C-f": find_file,
         "C-s": save_buffer,

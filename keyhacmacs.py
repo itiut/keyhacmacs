@@ -11,8 +11,10 @@ def configure(keymap, target_exe_names=[]):
     keymap_keyhacmacs.is_enabled = False
 
     def toggle_keyhacmacs():
-        keymap_keyhacmacs.is_enabled = not keymap_keyhacmacs.is_enabled
-        popup_keyhacmacs_status()
+        if keymap_keyhacmacs.is_enabled:
+            disable_keyhacmacs()
+        else:
+            enable_keyhacmacs()
 
     def enable_keyhacmacs():
         keymap_keyhacmacs.is_enabled = True

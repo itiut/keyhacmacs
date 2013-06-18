@@ -28,7 +28,7 @@ def configure(keymap, target_exe_names=[]):
 
     keymap_keyhacmacs["D-(242)"] = toggle_keyhacmacs
 
-    # emacs-like local state
+    # marking
     keymap_keyhacmacs.is_marked = False
 
     def toggle_mark():
@@ -42,6 +42,18 @@ def configure(keymap, target_exe_names=[]):
 
     def unset_mark():
         keymap_keyhacmacs.is_marked = False
+
+    def adapt_to_marking(func):
+        def _func():
+            if keymap_keyhacmacs.is_marked:
+                # D-Shift だと、M-< や M-> 押下時に、D-Shift が解除されてしまう。その対策。
+                keymap.command_InputKey("D-LShift")()
+                keymap.command_InputKey("D-RShift")()
+            func()
+            if keymap_keyhacmacs.is_marked:
+                keymap.command_InputKey("U-LShift")()
+                keymap.command_InputKey("U-RShift")()
+        return _func
 
     # moving point
     def forward_char():
@@ -173,23 +185,23 @@ def configure(keymap, target_exe_names=[]):
 
     # define key bindings
     define_keys = {
-        "C-a": [ move_beginning_of_line, ],
-        "C-b": [ backward_char, ],
+        "C-a": [ adapt_to_marking(move_beginning_of_line), ],
+        "C-b": [ adapt_to_marking(backward_char), ],
         "C-d": [ delete_char, unset_mark, ],
-        "C-e": [ move_end_of_line, ],
-        "C-f": [ forward_char, ],
+        "C-e": [ adapt_to_marking(move_end_of_line), ],
+        "C-f": [ adapt_to_marking(forward_char), ],
         "C-g": [ keyboard_quit, unset_mark, ],
         "C-h": [ delete_backward_char, unset_mark, ],
         "C-i": [ indent_for_tab_command, unset_mark, ],
         "C-j": [ newline, unset_mark, ],    # or newline_and_indent
 #        "C-k": [ kill_line, ],
         "C-m": [ newline, unset_mark, ],
-        "C-n": [ next_line, ],
+        "C-n": [ adapt_to_marking(next_line), ],
         "C-o": [ open_line, unset_mark],
-        "C-p": [ previous_line, ],
+        "C-p": [ adapt_to_marking(previous_line), ],
         "C-r": [ isearch_backward, unset_mark, ],
         "C-s": [ isearch_forward, unset_mark, ],
-        "C-v": [ scroll_down, ],
+        "C-v": [ adapt_to_marking(scroll_down), ],
         "C-w": [ kill_region, unset_mark, ],
         "C-y": [ yank, unset_mark, ],
         "C-Atmark": [ set_mark_command, ],
@@ -199,13 +211,13 @@ def configure(keymap, target_exe_names=[]):
         "C-S-o": [ open_line_above, unset_mark, ],
         "C-S-Slash": [ redo, unset_mark, ],
         "C-S-Underscore": [ redo, unset_mark, ],
-        "A-b": [ backward_word, ],
-        "A-f": [ forward_word, ],
+        "A-b": [ adapt_to_marking(backward_word), ],
+        "A-f": [ adapt_to_marking(forward_word), ],
         "A-g": [ goto_line, ],
-        "A-v": [ scroll_up, ],
+        "A-v": [ adapt_to_marking(scroll_up), ],
         "A-w": [ kill_ring_save, unset_mark, ],
-        "A-S-Comma": [ beginning_of_buffer, ],
-        "A-S-Period": [ end_of_buffer, ],
+        "A-S-Comma": [ adapt_to_marking(beginning_of_buffer), ],
+        "A-S-Period": [ adapt_to_marking(end_of_buffer), ],
     }
 
     define_keys_C_x = {

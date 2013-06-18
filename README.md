@@ -38,7 +38,12 @@ keyhac extension for emacs-like key bindings
 * Use `Ctrl-KANA` key to disable keyhacmacs
 * bug: `Ctrl-x` key cannot function as cut when keyhacmacs is disabled
 
+## Acknowledgement
+* [Windows の操作を emacs のキーバインドで行うための設定 （keyhac版）](http://www49.atwiki.jp/ntemacs/pages/25.html)
+
+
 -----
+
 
 ## これは何か?
 keyhacの拡張機能で、emacsライクなキーバインドを使えるようにします。
@@ -81,3 +86,6 @@ keyhacの拡張機能で、emacsライクなキーバインドを使えるよう
 * `カタカナひらがな`キーで、有効化
 * `Ctrl+カタカナひらがな`キーで、無効化
 * バグ: keyhacmacsが無効になっていても、`Ctrl+x`キーが通常の動き(カット)になりません
+
+## 謝辞
+* [Windows の操作を emacs のキーバインドで行うための設定 （keyhac版）](http://www49.atwiki.jp/ntemacs/pages/25.html)

@@ -1,8 +1,8 @@
 # keyhacmacs
 keyhac extension for emacs-like key bindings
 
-## Usage
-1. install this extension
+## Installation
+1. download this extension to keyhac extension directory
     ```
     $ cd /path/to/keyhac-install-dir/extension
     $ git clone git://github.com/itiut/keyhacmacs.git
@@ -26,3 +26,7 @@ keyhac extension for emacs-like key bindings
             ]
         )
     ```
+
+## Usage
+* Use `KANA` key to toggle keyhacmacs ON/OFF
+    * bug: `C-x` key cannot be disabled when keyhacmacs is OFF

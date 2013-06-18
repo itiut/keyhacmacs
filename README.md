@@ -49,14 +49,14 @@ keyhacの拡張機能で、emacsライクなキーバインドを使えるよう
 * keyhac: ver 1.60 beta 1
 
 ## インストール
-1. keyhacをインストールしたディレクトリ中のextensionディレクトリに、この拡張機能をダウンロードします。
+1. keyhacをインストールしたディレクトリ中のextensionディレクトリに、この拡張機能をダウンロードします。  
     `git clone`すると楽です。
     ```
     $ cd /path/to/keyhac-install-dir/extension
     $ git clone git://github.com/itiut/keyhacmacs.git
     ```
 
-2. `config.py`を次のように編集します。
+2. `config.py`を次のように編集します。  
     デフォルトだと、`{ユーザーディレクトリ}\AppData\Roaming\keyhac`にあると思います。
     ```python
     from keyhac import *

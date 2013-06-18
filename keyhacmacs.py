@@ -148,7 +148,7 @@ def configure(keymap, target_exe_names=[]):
         keymap.command_InputKey("Enter")()
 
     def newline_and_indent():
-        keymap.command_InputKey("Enter", "Tab")
+        keymap.command_InputKey("Enter", "Tab")()
 
     def open_line():
         keymap.command_InputKey("Enter", "Up", "End")()

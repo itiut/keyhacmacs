@@ -23,6 +23,7 @@ keyhac extension for emacs-like key bindings
             target_exe_names=[
                 "devenv.exe",
                 "sublime_text.exe",
+                # add more target executable file names...
             ]
         )
     ```

@@ -132,11 +132,11 @@ def configure(keymap, target_exe_names=[]):
 
     # search
     def isearch_forward():
-        # TODO: 検索中は <f3> or C-g
+        # TODO: 検索中は <f3>
         keymap.command_InputKey("C-f")()
 
     def isearch_backward():
-        # TODO: 検索中は S-<f3> or C-S-g
+        # TODO: 検索中は S-<f3>
         keymap.command_InputKey("C-f")()
 
     # indent, newline

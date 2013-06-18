@@ -7,9 +7,19 @@ def configure(keymap, target_exe_names=[]):
 
     keymap_keyhacmacs = keymap.defineWindowKeymap(check_func=is_target)
 
-    # enable/disable keyhacmacs
     keymap_keyhacmacs.is_enabled = False
+    keymap_keyhacmacs.is_marked = False
+    keymap_keyhacmacs.is_searching = False
 
+    def quit():
+        keymap_keyhacmacs.is_enabled = False
+        keymap_keyhacmacs.is_marked = False
+        keymap_keyhacmacs.is_searching = False
+
+    def reset():
+        keymap_keyhacmacs.is_searching = False
+
+    # enable/disable keyhacmacs
     def toggle_keyhacmacs():
         if keymap_keyhacmacs.is_enabled:
             disable_keyhacmacs()
@@ -31,8 +41,6 @@ def configure(keymap, target_exe_names=[]):
     keymap_keyhacmacs["D-(242)"] = toggle_keyhacmacs
 
     # marking
-    keymap_keyhacmacs.is_marked = False
-
     def toggle_mark():
         if keymap_keyhacmacs.is_marked:
             unset_mark()
@@ -132,12 +140,18 @@ def configure(keymap, target_exe_names=[]):
 
     # search
     def isearch_forward():
-        # TODO: 検索中は <f3>
-        keymap.command_InputKey("C-f")()
+        if keymap_keyhacmacs.is_searching:
+            keymap.command_InputKey("F3")()
+        else:
+            keymap_keyhacmacs.is_searching = True
+            keymap.command_InputKey("C-f")()
 
     def isearch_backward():
-        # TODO: 検索中は S-<f3>
-        keymap.command_InputKey("C-f")()
+        if keymap_keyhacmacs.is_searching:
+            keymap.command_InputKey("S-F3")()
+        else:
+            keymap_keyhacmacs.is_searching = True
+            keymap.command_InputKey("C-f")()
 
     # indent, newline
     def indent_for_tab_command():
@@ -177,12 +191,19 @@ def configure(keymap, target_exe_names=[]):
 
     # define key bindings
     define_keys = {
+        "A-b": [ adapt_to_marking(backward_word), ],
+        "A-f": [ adapt_to_marking(forward_word), ],
+        "A-g": [ goto_line, ],
+        "A-v": [ adapt_to_marking(scroll_up), ],
+        "A-w": [ kill_ring_save, unset_mark, ],
+        "A-S-Comma": [ adapt_to_marking(beginning_of_buffer), ],
+        "A-S-Period": [ adapt_to_marking(end_of_buffer), ],
         "C-a": [ adapt_to_marking(move_beginning_of_line), ],
         "C-b": [ adapt_to_marking(backward_char), ],
         "C-d": [ delete_char, unset_mark, ],
         "C-e": [ adapt_to_marking(move_end_of_line), ],
         "C-f": [ adapt_to_marking(forward_char), ],
-        "C-g": [ keyboard_quit, unset_mark, ],
+        "C-g": [ reset, keyboard_quit, unset_mark, ],
         "C-h": [ delete_backward_char, unset_mark, ],
         "C-i": [ indent_for_tab_command, unset_mark, ],
         "C-j": [ newline, unset_mark, ],    # or newline_and_indent
@@ -203,20 +224,14 @@ def configure(keymap, target_exe_names=[]):
         "C-S-o": [ open_line_above, unset_mark, ],
         "C-S-Slash": [ redo, unset_mark, ],
         "C-S-Underscore": [ redo, unset_mark, ],
-        "A-b": [ adapt_to_marking(backward_word), ],
-        "A-f": [ adapt_to_marking(forward_word), ],
-        "A-g": [ goto_line, ],
-        "A-v": [ adapt_to_marking(scroll_up), ],
-        "A-w": [ kill_ring_save, unset_mark, ],
-        "A-S-Comma": [ adapt_to_marking(beginning_of_buffer), ],
-        "A-S-Period": [ adapt_to_marking(end_of_buffer), ],
+        "Escape": [reset, keyboard_quit, unset_mark, ],
     }
 
     define_keys_C_x = {
         "h": [ mark_whole_buffer, set_mark, ],
         "k": [ kill_buffer, unset_mark, ],
         "u": [ undo, unset_mark, ],
-        "C-c": [ kill_emacs, unset_mark, ],
+        "C-c": [ kill_emacs, quit, ],
         "C-f": [ find_file, unset_mark, ],
         "C-s": [ save_buffer, ],
         "C-w": [ write_file, ],

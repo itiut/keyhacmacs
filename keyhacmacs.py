@@ -105,18 +105,13 @@ def configure(keymap, target_exe_names=[]):
         keymap.command_InputKey("Delete")()
 
     def kill_line():
-        # TODO: マーク実装する
-        keymap_keyhacmacs.is_marked = True
-        #mark(move_end_of_line)()
-        move_end_of_line()
-        keymap.command_InputKey("C-x")()
-        keymap_keyhacmacs.is_marked = False
+        keymap.command_InputKey("S-End", "C-x")()
 
     def kill_region():
         keymap.command_InputKey("C-x")()
 
     def kill_ring_save():
-        keymap.command_InputKey("C-c", "Esc")()
+        keymap.command_InputKey("C-c")()
 
     def yank():
         keymap.command_InputKey("C-v")()
@@ -196,7 +191,7 @@ def configure(keymap, target_exe_names=[]):
         "C-h": [ delete_backward_char, unset_mark, ],
         "C-i": [ indent_for_tab_command, unset_mark, ],
         "C-j": [ newline, unset_mark, ],    # or newline_and_indent
-#        "C-k": [ kill_line, ],
+        "C-k": [ kill_line, unset_mark],
         "C-m": [ newline, unset_mark, ],
         "C-n": [ adapt_to_marking(next_line), ],
         "C-o": [ open_line, unset_mark],

@@ -122,7 +122,6 @@ def configure(keymap, target_exe_names=[]):
 
     def mark_whole_buffer():
         keymap.command_InputKey("C-End", "C-S-Home")()
-        keymap_keyhacmacs.is_marked = True
 
     # undo, redo
     def undo():
@@ -158,12 +157,10 @@ def configure(keymap, target_exe_names=[]):
 
     def keyboard_quit():
         keymap.command_InputKey("Esc")()
-        #keymap.command_RecordStop()
 
     # file
     def find_file():
         keymap.command_InputKey("C-o")()
-        keymap_keyhacmacs.is_marked = False
 
     def save_buffer():
         keymap.command_InputKey("C-s")()
@@ -174,11 +171,9 @@ def configure(keymap, target_exe_names=[]):
     # window
     def kill_buffer():
         keymap.command_InputKey("C-w")()
-        keymap_keyhacmacs.is_marked = False
 
     def kill_emacs():
         keymap.command_InputKey("A-F4")()
-        keymap_keyhacmacs.is_marked = False
 
     # define key bindings
     define_keys = {
@@ -218,21 +213,22 @@ def configure(keymap, target_exe_names=[]):
     }
 
     define_keys_C_x = {
-        "h": mark_whole_buffer,
-        "k": kill_buffer,
-        "u": undo, # and unset_mark
-        "C-c": kill_emacs,
-        "C-f": find_file,
-        "C-s": save_buffer,
-        "C-w": write_file,
+        "h": [ mark_whole_buffer, set_mark, ],
+        "k": [ kill_buffer, unset_mark, ],
+        "u": [ undo, unset_mark, ],
+        "C-c": [ kill_emacs, unset_mark, ],
+        "C-f": [ find_file, unset_mark, ],
+        "C-s": [ save_buffer, ],
+        "C-w": [ write_file, ],
     }
 
-    def call_if_enabled(key, func):
+    def call_if_enabled(func, substitute_key=None):
         def _func():
             if keymap_keyhacmacs.is_enabled:
                 func()
             else:
-                keymap.command_InputKey(key)()
+                if substitute_key:
+                    keymap.command_InputKey(substitute_key)()
         return _func
 
     def join_funcs(funcs):
@@ -242,8 +238,9 @@ def configure(keymap, target_exe_names=[]):
         return _func
 
     for k, fs in define_keys.items():
-        keymap_keyhacmacs[k] = call_if_enabled(key=k, func=join_funcs(funcs=fs))
+        keymap_keyhacmacs[k] = call_if_enabled(func=join_funcs(funcs=fs), substitute_key=k)
 
+    # TODO: is_enabled == False のときに、C-xを無効にする
     keymap_keyhacmacs["C-x"] = keymap.defineMultiStrokeKeymap("C-x")
-    for k, f in define_keys_C_x.items():
-        keymap_keyhacmacs["C-x"][k] = f
+    for k, fs in define_keys_C_x.items():
+        keymap_keyhacmacs["C-x"][k] = call_if_enabled(func=join_funcs(funcs=fs))

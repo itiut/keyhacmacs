@@ -38,7 +38,10 @@ def configure(keymap, target_exe_names=[]):
         state = "ON" if keymap_keyhacmacs.is_enabled else "OFF"
         keymap.popBalloon("keyhacmacs", "keyhacmacs is " + state, 3000)
 
-    keymap_keyhacmacs["D-(242)"] = toggle_keyhacmacs
+    # KANA to enable
+    keymap_keyhacmacs["242"] = enable_keyhacmacs
+    # Ctrl-KANA to disable
+    keymap_keyhacmacs["C-242"] = disable_keyhacmacs
 
     # marking
     def toggle_mark():
